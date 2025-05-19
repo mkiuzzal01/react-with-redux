@@ -5,8 +5,8 @@ function App() {
   const dispatch = useAppDispatch();
   const { count } = useAppSelector((state) => state.counter);
 
-  const handleIncrement = () => {
-    dispatch(increment());
+  const handleIncrement = (amount: number) => {
+    dispatch(increment(amount));
   };
 
   const handleDecrement = () => {
@@ -16,7 +16,9 @@ function App() {
   return (
     <div className="flex justify-between items-center h-screen">
       <h1>Counter with Redux</h1>
-      <button onClick={handleIncrement}>Increment</button>
+      <button onClick={() => handleIncrement(5)}>Increment</button>
+      <button onClick={() => handleIncrement(1)}>Increment</button>
+
       <div>{count}</div>
       <button onClick={handleDecrement}>Decrement</button>
     </div>
