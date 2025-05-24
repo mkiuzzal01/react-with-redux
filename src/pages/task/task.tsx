@@ -1,5 +1,19 @@
+import TaskCard from "../../components/utils/TaskCard";
+import { selectTask } from "../../redux/features/task/taskSlice";
+import { useAppSelector } from "../../redux/hook";
+
 const Task = () => {
-  return <div>this is task page</div>;
+  const tasks = useAppSelector(selectTask);
+
+  return (
+    <div>
+      <div className="grid gap-4 grid-cols-4">
+        {tasks.map((task) => (
+          <TaskCard task={task} key={task.id} />
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Task;

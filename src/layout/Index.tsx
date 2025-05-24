@@ -9,7 +9,7 @@ const Index = () => {
         <Navbar />
       </nav>
 
-      <main className="flex-1 container mx-auto px-4">
+      <main className="flex-1 container mx-auto p-4">
         <Outlet />
       </main>
 
