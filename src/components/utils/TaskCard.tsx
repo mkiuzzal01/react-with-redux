@@ -1,18 +1,37 @@
-type TaskProps = {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: string;
-  priority: "ALL" | "Heigh" | "Medium" | "Low";
-};
+import { Trash2 } from "lucide-react";
+import type { ITask } from "../../redux/types";
+import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
+import { cn } from "../../lib/utils";
 
-const TaskCard = ({ task }: { task: TaskProps }) => {
+interface TaskProps {
+  task: ITask;
+}
+
+const TaskCard = ({ task }: TaskProps) => {
   return (
     <div className="w-full border-2 border-purple-700 p-4 m-1 rounded-2xl">
-      <h1 className="text-2xl font-bold">{task.title}</h1>
-      <div className="pt-2">
-        <p>{task.description}</p>
-        <p>{task.dueDate}</p>
+      <div className="flex items-center gap-4">
+        <div
+          className={cn("size-3 rounded-full", {
+            "bg-green-500": task.priority === "Low",
+            "bg-orange-400": task.priority === "Medium",
+            "bg-red-500": task.priority === "Heigh",
+          })}
+        ></div>
+        <h1 className="text-2xl font-bold">{task.title}</h1>
+      </div>
+      <div className="flex justify-between items-center">
+        <div>
+          <p>{task.description}</p>
+          <p>{task.dueDate}</p>
+        </div>
+        <div>
+          <Button variant="link">
+            <Trash2 color="red" />
+          </Button>
+          <Checkbox />
+        </div>
       </div>
     </div>
   );
