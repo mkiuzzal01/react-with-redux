@@ -24,12 +24,23 @@ import { cn } from "../../lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
-export function Modal() {
-  const from = useForm();
+import type { SubmitHandler } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
+interface ModalFormValues {
+  title: string;
+  priority: string;
+  dueDate: Date | null;
+  description: string;
+}
+
+interface ModalProps {
+  onSubmit: SubmitHandler<ModalFormValues>;
+}
+
+export function Modal({ onSubmit }: ModalProps) {
+  const from: UseFormReturn<ModalFormValues> = useForm<ModalFormValues>();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -104,7 +115,7 @@ export function Modal() {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value}
+                        selected={field.value ?? undefined}
                         onSelect={field.onChange}
                         initialFocus
                       />
