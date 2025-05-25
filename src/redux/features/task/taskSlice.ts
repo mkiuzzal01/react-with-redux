@@ -7,7 +7,10 @@ interface InitialState {
   filter: "ALL" | "Heigh" | "Medium" | "Low";
 }
 
-type DraftTask = Pick<ITask, "title" | "description" | "dueDate" | "priority">;
+type DraftTask = Pick<
+  ITask,
+  "title" | "description" | "dueDate" | "priority" | "assignedUser"
+>;
 
 const createTask = (taskData: DraftTask): ITask => {
   return {
@@ -26,6 +29,7 @@ const initialState: InitialState = {
       dueDate: new Date("2025-05-10"),
       isCompleted: false,
       priority: "Heigh",
+      assignedUser: null,
     },
     {
       id: "02",
@@ -34,12 +38,11 @@ const initialState: InitialState = {
       dueDate: new Date("2025-05-10"),
       isCompleted: false,
       priority: "Medium",
+      assignedUser: null,
     },
   ],
   filter: "ALL",
 };
-
-
 
 const taskSlice = createSlice({
   name: "task",
@@ -57,21 +60,36 @@ const taskSlice = createSlice({
       );
     },
 
+    updateFilter: (
+      state,
+      action: PayloadAction<"ALL" | "Heigh" | "Medium" | "Low">
+    ) => {
+      state.filter = action.payload;
+    },
     deleteTask: (state, action: PayloadAction<string>) => {
       state.tasks = state.tasks.filter((item) => item.id !== action.payload);
     },
   },
 });
 
-
-
 export const selectTask = (state: RootState) => {
-  return state.todo.tasks;
+  const filter = state.todo.filter;
+  console.log(filter);
+  if (filter === "Low") {
+    return state.todo.tasks.filter((item) => item.priority === "Low");
+  } else if (filter === "Medium") {
+    return state.todo.tasks.filter((item) => item.priority === "Medium");
+  } else if (filter === "Heigh") {
+    return state.todo.tasks.filter((item) => item.priority === "Heigh");
+  } else {
+    return state.todo.tasks;
+  }
 };
 
 export const selectFilter = (state: RootState) => {
   return state.todo.filter;
 };
 
-export const { addTask, toggleCompleteState, deleteTask } = taskSlice.actions;
+export const { addTask, toggleCompleteState, updateFilter, deleteTask } =
+  taskSlice.actions;
 export default taskSlice.reducer;

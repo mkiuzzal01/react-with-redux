@@ -26,23 +26,32 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import type { SubmitHandler } from "react-hook-form";
 import type { UseFormReturn } from "react-hook-form";
+import type { IUser } from "../../redux/types";
+import { useState } from "react";
 
 interface ModalFormValues {
   title: string;
   priority: string;
   dueDate: Date | null;
+  assignUser: string | null;
   description: string;
 }
 
 interface ModalProps {
   onSubmit: SubmitHandler<ModalFormValues>;
+  users: IUser[];
 }
 
-export function Modal({ onSubmit }: ModalProps) {
-  const from: UseFormReturn<ModalFormValues> = useForm<ModalFormValues>();
-
+export function AddTaskModal({ onSubmit, users }: ModalProps) {
+  const [open, setOpen] = useState(false);
+  const form: UseFormReturn<ModalFormValues> = useForm<ModalFormValues>();
+  const handleSubmit = (data: any) => {
+    onSubmit(data);
+    setOpen(false);
+    form.reset();
+  };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Add Task</Button>
       </DialogTrigger>
@@ -51,11 +60,11 @@ export function Modal({ onSubmit }: ModalProps) {
           <DialogTitle>Add Task</DialogTitle>
           <DialogDescription>Provide an proper information</DialogDescription>
         </DialogHeader>
-        <Form {...from}>
-          <form onSubmit={from.handleSubmit(onSubmit)}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
             <div className="grid grid-cols-1 gap-3">
               <FormField
-                control={from.control}
+                control={form.control}
                 name="title"
                 render={({ field }) => (
                   <FormItem>
@@ -66,13 +75,13 @@ export function Modal({ onSubmit }: ModalProps) {
                 )}
               />
               <FormField
-                control={from.control}
+                control={form.control}
                 name="priority"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <Select
-                        value={field.value}
+                        value={field.value ?? undefined}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="w-full">
@@ -90,7 +99,31 @@ export function Modal({ onSubmit }: ModalProps) {
               />
 
               <FormField
-                control={from.control}
+                control={form.control}
+                name="assignUser"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Select
+                        value={field.value ?? undefined}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Assign User" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {users.map((Item) => (
+                            <SelectItem value={Item.id}>{Item.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="dueDate"
                 render={({ field }) => (
                   <Popover>
@@ -125,7 +158,7 @@ export function Modal({ onSubmit }: ModalProps) {
               />
 
               <FormField
-                control={from.control}
+                control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
@@ -138,6 +171,7 @@ export function Modal({ onSubmit }: ModalProps) {
                   </FormItem>
                 )}
               />
+
               <DialogFooter className="my-2">
                 <Button type="submit">Save</Button>
               </DialogFooter>

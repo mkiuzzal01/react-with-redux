@@ -3,11 +3,12 @@ import type { ITask } from "../../redux/types";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { cn } from "../../lib/utils";
-import { useAppDispatch } from "../../redux/hook";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import {
   deleteTask,
   toggleCompleteState,
 } from "../../redux/features/task/taskSlice";
+import { selectUsers } from "../../redux/features/users/userSlice";
 
 interface TaskProps {
   task: ITask;
@@ -15,6 +16,13 @@ interface TaskProps {
 
 const TaskCard = ({ task }: TaskProps) => {
   const dispatch = useAppDispatch();
+  const users = useAppSelector(selectUsers);
+
+  console.log("users:", users);
+  console.log("task:", task);
+
+  const user = users.find((user) => user.id === task.assignedUser);
+  console.log(user);
 
   return (
     <div className="w-full border-2 border-purple-700 p-4 m-1 rounded-2xl">
@@ -32,6 +40,9 @@ const TaskCard = ({ task }: TaskProps) => {
         <div>
           <p>{task.description}</p>
           <p>{new Date(task.dueDate).toLocaleString()}</p>
+          <div>
+            <h3 className="text-purple-500">{user ? user.name : "No one"}</h3>
+          </div>
         </div>
         <div>
           <Button onClick={() => dispatch(deleteTask(task.id))} variant="link">
