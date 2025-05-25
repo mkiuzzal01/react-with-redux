@@ -18,11 +18,7 @@ const TaskCard = ({ task }: TaskProps) => {
   const dispatch = useAppDispatch();
   const users = useAppSelector(selectUsers);
 
-  console.log("users:", users);
-  console.log("task:", task);
-
   const user = users.find((user) => user.id === task.assignedUser);
-  console.log(user);
 
   return (
     <div className="w-full border-2 border-purple-700 p-4 m-1 rounded-2xl">

@@ -11,16 +11,14 @@ type DraftUser = Pick<IUser, "name">;
 const createUser = (userData: DraftUser): IUser => {
   return {
     id: nanoid(),
-    isDeleted: false,
     ...userData,
   };
 };
 const initialState: InitialState = {
   users: [
     {
-      id: "01",
+      id: "8jusDJW2a08rSTSbcSfZG",
       name: "MD Khairul Islam",
-      isDeleted: false,
     },
   ],
 };
@@ -33,8 +31,8 @@ const userSlice = createSlice({
       const userData = createUser(action.payload);
       state.users.push(userData);
     },
-    deleteUser: (state, action: PayloadAction<IUser>) => {
-      state.users.filter((Item) => Item.id !== action.payload.id);
+    deleteUser: (state, action: PayloadAction<string>) => {
+      state.users = state.users.filter((user) => user.id !== action.payload);
     },
   },
 });

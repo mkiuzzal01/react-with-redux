@@ -10,6 +10,7 @@ const User = () => {
   const onSubmit = (data) => {
     dispatch(addUser(data));
   };
+  
   return (
     <div>
       <div className="flex justify-between ">

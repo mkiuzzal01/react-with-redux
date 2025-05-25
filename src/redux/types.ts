@@ -11,5 +11,4 @@ export interface ITask {
 export interface IUser {
   id: string;
   name: string;
-  isDeleted: boolean;
 }

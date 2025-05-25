@@ -25,26 +25,17 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import type { SubmitHandler } from "react-hook-form";
-import type { UseFormReturn } from "react-hook-form";
-import type { IUser } from "../../redux/types";
+import type { ITask, IUser } from "../../redux/types";
 import { useState } from "react";
 
-interface ModalFormValues {
-  title: string;
-  priority: string;
-  dueDate: Date | null;
-  assignUser: string | null;
-  description: string;
-}
-
 interface ModalProps {
-  onSubmit: SubmitHandler<ModalFormValues>;
+  onSubmit: SubmitHandler<ITask>;
   users: IUser[];
 }
 
 export function AddTaskModal({ onSubmit, users }: ModalProps) {
   const [open, setOpen] = useState(false);
-  const form: UseFormReturn<ModalFormValues> = useForm<ModalFormValues>();
+  const form  = useForm();
   const handleSubmit = (data: any) => {
     onSubmit(data);
     setOpen(false);
@@ -100,7 +91,7 @@ export function AddTaskModal({ onSubmit, users }: ModalProps) {
 
               <FormField
                 control={form.control}
-                name="assignUser"
+                name="assignedUser"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -112,8 +103,8 @@ export function AddTaskModal({ onSubmit, users }: ModalProps) {
                           <SelectValue placeholder="Assign User" />
                         </SelectTrigger>
                         <SelectContent>
-                          {users.map((Item) => (
-                            <SelectItem value={Item.id}>{Item.name}</SelectItem>
+                          {users.map((user) => (
+                            <SelectItem value={user.id}>{user.name}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
